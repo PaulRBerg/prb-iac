@@ -27,10 +27,7 @@ cat >> /home/ubuntu/.bashrc <<'ENVEOF'
 export GITHUB_TOKEN='${github_token}'
 ENVEOF
 
-# --- chezmoi + dotfiles ---
-echo ">>> Installing chezmoi"
-sudo -u ubuntu mkdir -p /home/ubuntu/.local/bin
-curl -fsLS get.chezmoi.io | sudo -u ubuntu sh -s -- -b /home/ubuntu/.local/bin
+# --- dotfiles ---
 
 echo ">>> Cloning dotfiles"
 sudo -u ubuntu mkdir -p /home/ubuntu/.local/share
