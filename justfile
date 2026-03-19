@@ -27,21 +27,21 @@ init:
 # Plan the aws (dry run)
 [group("deploy")]
 @aws-plan:
-    terraform -chdir=aws plan
+    just _aws-tf plan
 alias sp := aws-plan
 
 # Deploy the aws
 [confirm("Deploy the aws?")]
 [group("deploy")]
 @aws-deploy:
-    terraform -chdir=aws apply
+    just _aws-tf apply
 alias sd := aws-deploy
 
 # Destroy the aws
 [confirm("Destroy the aws? This is irreversible.")]
 [group("deploy")]
 @aws-destroy:
-    terraform -chdir=aws destroy
+    just _aws-tf destroy
 
 # ---------------------------------------------------------------------------- #
 #                                    CHECKS                                    #
@@ -88,6 +88,10 @@ alias fw := full-write
 # ---------------------------------------------------------------------------- #
 #                                   UTILITIES                                  #
 # ---------------------------------------------------------------------------- #
+
+# Private recipe to run Terraform with exported AWS credentials
+@_aws-tf *args:
+    eval "$(aws configure export-credentials --format env)" && terraform -chdir=aws {{ args }}
 
 # Private recipe to run a check with formatted output
 @_run_with-status recipe:

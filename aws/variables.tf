@@ -37,6 +37,24 @@ variable "volume_size" {
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Networking
+# ──────────────────────────────────────────────────────────────────────────────
+
+# https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#SecurityGroup:groupId=sg-0fbba805c4291f497
+variable "security_group_id" {
+  description = "ID of an existing security group to attach to the instance"
+  type        = string
+  default     = "sg-0fbba805c4291f497"
+}
+
+# https://us-east-1.console.aws.amazon.com/iam/home#/roles/details/SSMAccessRole
+variable "instance_profile_name" {
+  description = "Name of an existing IAM instance profile with SSM access"
+  type        = string
+  default     = "SSMAccessRole"
+}
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Secrets
 # ──────────────────────────────────────────────────────────────────────────────
 

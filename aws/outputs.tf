@@ -15,5 +15,5 @@ output "public_ip" {
 
 output "security_group_id" {
   description = "ID of the security group"
-  value       = aws_security_group.main.id
+  value       = data.aws_security_group.main.id
 }
