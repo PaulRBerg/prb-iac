@@ -13,6 +13,26 @@
 #
 
 # -----------------------------------------------------------------------------
+# Data Sources — default VPC + subnet
+# -----------------------------------------------------------------------------
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+
+  filter {
+    name   = "availability-zone"
+    values = ["${var.aws_region}a"]
+  }
+}
+
+# -----------------------------------------------------------------------------
 # Data Sources — SSM secrets
 # -----------------------------------------------------------------------------
 
@@ -28,7 +48,7 @@ data "aws_ssm_parameter" "github_token" {
 resource "aws_security_group" "main" {
   name        = "${local.name}-sg"
   description = "${local.name} — SSH ingress"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_vpc.default.id
 
   tags = {
     Name = "${local.name}-sg"
@@ -80,7 +100,7 @@ resource "aws_instance" "main" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = var.key_name
-  subnet_id              = var.subnet_id
+  subnet_id              = data.aws_subnets.default.ids[0]
   vpc_security_group_ids = [aws_security_group.main.id]
   iam_instance_profile   = aws_iam_instance_profile.instance.name
 
@@ -90,7 +110,7 @@ resource "aws_instance" "main" {
     encrypted   = true
   }
 
-  user_data = base64encode(templatefile("${path.module}/user-data.sh.tftpl", {
+  user_data = base64encode(templatefile("${path.module}/bootstrap.sh.tftpl", {
     github_token = data.aws_ssm_parameter.github_token.value
   }))
 

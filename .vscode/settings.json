@@ -1,5 +1,0 @@
-{
-  "files.associations": {
-    "**/aws-ec2/*.yaml": "cloudformation"
-  }
-}

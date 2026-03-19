@@ -4,21 +4,22 @@ Personal infrastructure-as-code templates using Terraform.
 
 ## 📦 Modules
 
-### `aws-ec2`
+### `aws`
 
 Provisions an Ubuntu 24.04 EC2 dev box (`prb-agents`) with:
 
 - SSH ingress security group
 - SSM Session Manager via IAM instance profile
 - Encrypted gp3 root volume (50 GB default)
-- User-data bootstrap: system packages, git credentials, [dotfiles](https://github.com/PaulRBerg/dotfiles) via chezmoi
+- Bootstrap script that clones [dotfiles](https://github.com/PaulRBerg/dotfiles) and runs `bootstrap_ubuntu.sh`
+- Auto-discovers default VPC and subnet via data sources
 
 ## 🚀 Usage
 
 ### Prerequisites
 
 - [Terraform](https://www.terraform.io/) >= 1.7
-- AWS CLI configured with appropriate credentials
+- [AWS CLI](https://aws.amazon.com/cli/) with a `default` profile configured (`aws configure`)
 - An SSH key pair in your target region
 
 ### Store Secrets
@@ -33,7 +34,7 @@ aws ssm put-parameter \
 ### Deploy
 
 ```bash
-cd aws-ec2
+cd aws
 terraform init
 terraform apply -var key_name=<your-key-pair>
 ```
@@ -59,8 +60,6 @@ ssh ubuntu@<ip> tail -f /var/log/user-data.log
 | `volume_size`           | Root EBS volume size (GB)                   | `50`                          |
 | `key_name`              | SSH key pair name                           | **required**                  |
 | `ami_id`                | Ubuntu 24.04 LTS AMI                        | `ami-0ec10929233384c7f`       |
-| `subnet_id`             | Subnet in the default VPC                   | `subnet-056574513ac9c1846`    |
-| `vpc_id`                | VPC for the security group                  | `vpc-0dd3061076bccd5b6`       |
 | `github_token_ssm_path` | SSM path for GitHub PAT                    | `/prb-agents/github-token`    |
 
 ## 📤 Outputs
@@ -77,5 +76,5 @@ ssh ubuntu@<ip> tail -f /var/log/user-data.log
 [TFLint](https://github.com/terraform-linters/tflint) is configured with the `recommended` preset and the [AWS ruleset](https://github.com/terraform-linters/tflint-ruleset-aws):
 
 ```bash
-tflint --chdir=aws-ec2
+tflint --chdir=aws
 ```

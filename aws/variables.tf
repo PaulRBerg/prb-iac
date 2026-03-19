@@ -9,22 +9,6 @@ variable "aws_region" {
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Networking
-# ──────────────────────────────────────────────────────────────────────────────
-
-variable "subnet_id" {
-  description = "Subnet in the default VPC (us-east-1a)"
-  type        = string
-  default     = "subnet-056574513ac9c1846"
-}
-
-variable "vpc_id" {
-  description = "VPC for the security group"
-  type        = string
-  default     = "vpc-0dd3061076bccd5b6"
-}
-
-# ──────────────────────────────────────────────────────────────────────────────
 # Compute
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -43,6 +27,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "SSH key pair name"
   type        = string
+  default     = "prb-agents-key"
 }
 
 variable "volume_size" {

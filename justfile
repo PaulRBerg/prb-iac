@@ -21,8 +21,27 @@ default:
 
 # Initialize Terraform and TFLint
 init:
-    terraform -chdir=aws-ec2 init
+    terraform -chdir=aws init
     tflint --init
+
+# Plan the aws (dry run)
+[group("deploy")]
+@aws-plan:
+    terraform -chdir=aws plan
+alias sp := aws-plan
+
+# Deploy the aws
+[confirm("Deploy the aws?")]
+[group("deploy")]
+@aws-deploy:
+    terraform -chdir=aws apply
+alias sd := aws-deploy
+
+# Destroy the aws
+[confirm("Destroy the aws? This is irreversible.")]
+[group("deploy")]
+@aws-destroy:
+    terraform -chdir=aws destroy
 
 # ---------------------------------------------------------------------------- #
 #                                    CHECKS                                    #
@@ -59,12 +78,12 @@ alias fw := full-write
 # Lint Terraform files with tflint
 [group("checks")]
 @lint:
-    tflint --chdir=aws-ec2
+    tflint --chdir=aws
 
 # Validate Terraform configuration
 [group("checks")]
 @validate:
-    terraform -chdir=aws-ec2 validate
+    terraform -chdir=aws validate
 
 # ---------------------------------------------------------------------------- #
 #                                   UTILITIES                                  #
