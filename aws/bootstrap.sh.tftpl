@@ -9,6 +9,15 @@ export GITHUB_TOKEN='${github_token}'
 apt-get update -y
 apt-get install -y curl git
 
+# --- Write chezmoi config so templates can read .github_token ---
+install -d -o ubuntu -g ubuntu /home/ubuntu/.config/chezmoi
+cat > /home/ubuntu/.config/chezmoi/chezmoi.toml <<TOML
+[data]
+  github_token = "${github_token}"
+TOML
+chown ubuntu:ubuntu /home/ubuntu/.config/chezmoi/chezmoi.toml
+chmod 600 /home/ubuntu/.config/chezmoi/chezmoi.toml
+
 # --- Clone dotfiles and hand off to bootstrap ---
 sudo -u ubuntu git clone \
   "https://github.com/PaulRBerg/dotfiles.git" \
