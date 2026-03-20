@@ -3,8 +3,7 @@ set -euo pipefail
 exec > >(tee /var/log/user-data.log | logger -t user-data) 2>&1
 
 export DEBIAN_FRONTEND=noninteractive
-
-GITHUB_TOKEN='${github_token}'
+export GITHUB_TOKEN='${github_token}'
 
 # --- Minimal prereqs for bootstrap ---
 apt-get update -y
@@ -12,7 +11,7 @@ apt-get install -y curl git
 
 # --- Clone dotfiles and hand off to bootstrap ---
 sudo -u ubuntu git clone \
-  "https://PaulRBerg:$GITHUB_TOKEN@github.com/PaulRBerg/dotfiles.git" \
+  "https://github.com/PaulRBerg/dotfiles.git" \
   /home/ubuntu/.local/share/chezmoi
 
 cd /home/ubuntu/.local/share/chezmoi
