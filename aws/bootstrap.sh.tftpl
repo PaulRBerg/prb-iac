@@ -16,6 +16,6 @@ sudo -u ubuntu git clone \
   /home/ubuntu/.local/share/chezmoi
 
 cd /home/ubuntu/.local/share/chezmoi
-bash bootstrap_ubuntu.sh
+SUDO_USER=ubuntu bash bootstrap_ubuntu.sh
 
 echo ">>> Setup complete at $(date)"

@@ -31,14 +31,13 @@ init:
 alias sp := aws-plan
 
 # Deploy the aws
-[confirm("Deploy the aws?")]
 [group("deploy")]
 @aws-deploy:
     just _aws-tf apply
 alias sd := aws-deploy
 
 # Destroy the aws
-[confirm("Destroy the aws? This is irreversible.")]
+[confirm("Destroying the stack is irreversible. Continue? [y/N]")]
 [group("deploy")]
 @aws-destroy:
     just _aws-tf destroy
